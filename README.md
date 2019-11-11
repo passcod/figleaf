@@ -97,142 +97,144 @@ Settings {
 
 ## Table of contents
 
-- [Definition](#definition-of-configuration-structure)
-  + [Arbitrary](#arbitrary-value)
-  + [Serde deserialisable](#serde-deserialisable-only)
-    * [Refresher](#refresher-on-serde-syntax)
-    * [Helpers](#serde-helpers)
-  + [Macro](#figleaf-macro)
-    * [Standalone](#standalone-use)
-    * [Alongside serde](#alongside-serde)
-    * [Derived fields]
-    * [Switched fields]
-    * [Documentation comments]
-    * [Contextual documentation]
-    * [Conditionals]
-- [Generators]
-  + [Readme]
-  + [Example config file]
-  + [Man page]
-  + [JSON]
-- [Loading]
-  + [Async]
-  + [Blocking] /* async but with a quick block_on() wrapper */
-  + [Sync] /* without async at all (feature-gated) */
-  + [Singleton]
-    * [Once]
-    * [Lazy]
-    * [With main]
-  + [Recursive reconfiguration]
-- [In libraries]
-  + [Usage]
-  + [Discovery]
-  + [Overrides]
-  + [Excludes]
-  + [Remapping]
-- [Languages]
-  + [Defaults]
-  + [Compile-time selection]
-  + [Additional]
-    * [Via cargo features]
-    * [Via plugins]
-  + [Runtime selection]
-  + [File extentions and mimetypes]
-  + [Auto-detection]
-  + [Preprocessing]
-- [Environment]
-  + [Key format (prefix, etc)]
-  + [Value parsing]
-  + [Blobs]
-- [Arguments]
-  + [Wildcards / globs]
-  + [Positional]
-  + [Pico]
-  + [Clap]
-    * [From Figleaf]
-    * [From existing]
-- [Files]
-  + [Lookup paths]
-  + [Hierarchy]
-  + [Permissions and file attributes]
-  + [Overriding]
-  + [Includes]
-    * [Via `.d` folders]
-    * [Via language]
-    * [Via recursion]
-    * [Via preprocessor]
-  + [With a custom reader]
-  * [Memory-mapped]
-- [Network]
-  + [HTTP]
-    * [HTTPS]
-    * [HTTP/3]
-  + [TCP]
-    * [TLS]
-    * [Domain sockets]
-  + [UDP]
-    * [Passive]
-    * [Active]
-    * [QUIC]
-    * [Datagram sockets]
-  + [DNS]
-    * [mDNS]
-- [Databases]
-  + [Connection]
-    * [Configuration]
-    * [Reuse]
-    * [Pooling]
-  + [Relational]
-    * [SQLite]
-    * [MySQL]
-    * [Postgres]
-    * [MSSQL]
-    * [Cassandra]
-    * [Redshift]
-  + [Key-value]
-    * [Redis-like]
-    * [LevelDB-like]
-    * [Sled]
-    * [Etcd]
-    * [Consul]
-    * [Riak]
-  + [Document]
-    * [Mongo]
-    * [Couch]
-- [Platorm-specific]
-  + [D-Bus]
-  + [Windows COM]
-  + [Apple Events]
-  + [Virtual filesystems]
-- [Special]
-  + [Standard input]
-  + [Appended to binary]
-  + [Shared memory]
-  + [Keyring]
-  + [Clipboard]
-  + [EFI variables]
-  + [Hardware tokens]
-  + [Serial]
-  + [Block device]
-  + [Signals]
-- [Reloading]
-  + [Watching and polling]
-  + [Signals]
-  + [Reconfiguration]
-  + [Environment]
-  + [Files]
-  + [Network]
-  + [Database]
-- [Encryption]
-  + [Symmetric]
-  + [Public key]
-    * [Signing]
-  + [Layered]
-  + [Partial]
-    * [By method]
-    * [By file]
-    * [By key]
-  + [Secrets in memory]
+Stricken items are not (or only partially) implemented yet.
+
+- ~~[Definition](#definition-of-configuration-structure)~~
+  + ~~[Arbitrary](#arbitrary-value)~~
+  + ~~[Serde deserialisable](#serde-deserialisable-only)~~
+    * ~~[Refresher](#refresher-on-serde-syntax)~~
+    * ~~[Helpers](#serde-helpers)~~
+  + ~~[Macro](#figleaf-macro)~~
+    * ~~[Standalone](#standalone-use)~~
+    * ~~[Alongside serde](#alongside-serde)~~
+    * ~~[Derived fields](#derived-fields)~~
+    * ~~[Switched fields]~~
+    * ~~[Documentation comments]~~
+    * ~~[Contextual documentation]~~
+    * ~~[Conditionals]~~
+- ~~[Generators]~~
+  + ~~[Readme]~~
+  + ~~[Example config file]~~
+  + ~~[Man page]~~
+  + ~~[JSON]~~
+- ~~[Loading]~~
+  + ~~[Async]~~
+  + ~~[Blocking] /* async but with a quick block_on() wrapper */~~
+  + ~~[Sync] /* without async at all (feature-gated) */~~
+  + ~~[Singleton]~~
+    * ~~[Once]~~
+    * ~~[Lazy]~~
+    * ~~[With main]~~
+  + ~~[Recursive reconfiguration]~~
+- ~~[In libraries]~~
+  + ~~[Usage]~~
+  + ~~[Discovery]~~
+  + ~~[Overrides]~~
+  + ~~[Excludes]~~
+  + ~~[Remapping]~~
+- ~~[Languages]~~
+  + ~~[Defaults]~~
+  + ~~[Compile-time selection]~~
+  + ~~[Additional]~~
+    * ~~[Via cargo features]~~
+    * ~~[Via plugins]~~
+  + ~~[Runtime selection]~~
+  + ~~[File extentions and mimetypes]~~
+  + ~~[Auto-detection]~~
+  + ~~[Preprocessing]~~
+- ~~[Environment]~~
+  + ~~[Key format (prefix, etc)]~~
+  + ~~[Value parsing]~~
+  + ~~[Blobs]~~
+- ~~[Arguments]~~
+  + ~~[Wildcards / globs]~~
+  + ~~[Positional]~~
+  + ~~[Pico]~~
+  + ~~[Clap]~~
+    * ~~[From Figleaf]~~
+    * ~~[From existing]~~
+- ~~[Files]~~
+  + ~~[Lookup paths]~~
+  + ~~[Hierarchy]~~
+  + ~~[Permissions and file attributes]~~
+  + ~~[Overriding]~~
+  + ~~[Includes]~~
+    * ~~[Via `.d` folders]~~
+    * ~~[Via language]~~
+    * ~~[Via recursion]~~
+    * ~~[Via preprocessor]~~
+  + ~~[With a custom reader]~~
+  * ~~[Memory-mapped]~~
+- ~~[Network]~~
+  + ~~[HTTP]~~
+    * ~~[HTTPS]~~
+    * ~~[HTTP/3]~~
+  + ~~[TCP]~~
+    * ~~[TLS]~~
+    * ~~[Domain sockets]~~
+  + ~~[UDP]~~
+    * ~~[Passive]~~
+    * ~~[Active]~~
+    * ~~[QUIC]~~
+    * ~~[Datagram sockets]~~
+  + ~~[DNS]~~
+    * ~~[mDNS]~~
+- ~~[Databases]~~
+  + ~~[Connection]~~
+    * ~~[Configuration]~~
+    * ~~[Reuse]~~
+    * ~~[Pooling]~~
+  + ~~[Relational]~~
+    * ~~[SQLite]~~
+    * ~~[MySQL]~~
+    * ~~[Postgres]~~
+    * ~~[MSSQL]~~
+    * ~~[Cassandra]~~
+    * ~~[Redshift]~~
+  + ~~[Key-value]~~
+    * ~~[Redis-like]~~
+    * ~~[LevelDB-like]~~
+    * ~~[Sled]~~
+    * ~~[Etcd]~~
+    * ~~[Consul]~~
+    * ~~[Riak]~~
+  + ~~[Document]~~
+    * ~~[Mongo]~~
+    * ~~[Couch]~~
+- ~~[Platorm-specific]~~
+  + ~~[D-Bus]~~
+  + ~~[Windows COM]~~
+  + ~~[Apple Events]~~
+  + ~~[Virtual filesystems]~~
+- ~~[Special]~~
+  + ~~[Standard input]~~
+  + ~~[Appended to binary]~~
+  + ~~[Shared memory]~~
+  + ~~[Keyring]~~
+  + ~~[Clipboard]~~
+  + ~~[EFI variables]~~
+  + ~~[Hardware tokens]~~
+  + ~~[Serial]~~
+  + ~~[Block device]~~
+  + ~~[Signals]~~
+- ~~[Reloading]~~
+  + ~~[Watching and polling]~~
+  + ~~[Signals]~~
+  + ~~[Reconfiguration]~~
+  + ~~[Environment]~~
+  + ~~[Files]~~
+  + ~~[Network]~~
+  + ~~[Database]~~
+- ~~[Encryption]~~
+  + ~~[Symmetric]~~
+  + ~~[Public key]~~
+    * ~~[Signing]~~
+  + ~~[Layered]~~
+  + ~~[Partial]~~
+    * ~~[By method]~~
+    * ~~[By file]~~
+    * ~~[By key]~~
+  + ~~[Secrets in memory]~~
 
 ## Definition of configuration structure
 
