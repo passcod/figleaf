@@ -342,3 +342,35 @@ dbg!(Config::generate_markdown());
 ```
 
 TODO: Serde-specific integrations
+
+#### Derived fields
+
+Marking a field with `#[figleaf(derive_with = function)]` creates a
+once-computed field: the value is computed once when the configuration is
+loaded by calling the function provided with a reference to the
+partially-constructed structure.
+
+If the field implements `Default`, that is used for the initial value while
+constructing the structure. Otherwise, the structure is partially constructed
+using `MaybeUninit`. In any case, accessing the field being derived on the
+passed-in partially-constructed structure is strongly discouraged and may be
+undefined behaviour.
+
+```rust
+#[figleaf]
+#[derive(Deserialize)]
+struct Config {
+    loaded: String,
+
+    #[figleaf(derived_with = derivation)]
+    derived: String,
+}
+
+fn derivation(partial: &Config) -> String {
+  partial.loaded.trim().into()
+}
+```
+
+#### Switched fields
+
+
