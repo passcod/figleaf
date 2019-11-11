@@ -112,11 +112,11 @@ Stricken items are not (or only partially) implemented yet.
     * ~~[Documentation comments](#documentation-comments)~~
     * ~~[Contextual documentation](#contextual-documentation)~~
     * ~~[Conditionals](#runtime-field-conditions)~~
-- ~~[Generators]~~
-  + ~~[Readme]~~
-  + ~~[Example config file]~~
-  + ~~[Man page]~~
-  + ~~[JSON]~~
+- ~~[Generators](#generators)~~
+  + ~~[Readme](#readme)~~
+  + ~~[Example config file](#example-configuration-file)~~
+  + ~~[Man page](#man-page)~~
+  + ~~[JSON](#json)~~
 - ~~[Loading]~~
   + ~~[Async]~~
   + ~~[Blocking] /* async but with a quick block_on() wrapper */~~
@@ -492,4 +492,65 @@ Available conditional attributes:
 - `singleton`: `"true"` when loading as a singleton
 - `source`: `file`, `env`, `args`, `db:*`...
 - TODO: more
+
+## Generators
+
+Figleaf comes several generators that create useful output from your
+configuration definition. Due to technical limitations, these need to be called
+from your own code and return strings — you can then output to screen or to
+file as you see fit.
+
+```rust
+use figleaf::prelude::*;
+
+#[figleaf]
+#[derive(Deserialize)]
+struct Config {
+    field: String,
+}
+
+println!("{}", Config::generate(generators::Output::JSON));
+```
+
+### Readme
+
+You can output a readme fragment describing your configuration file in various
+readme formats:
+
+- `plain`
+- `commonmark` (aka Markdown)
+- `asciidoc`
+
+TODO: output example
+
+### Example configuration file
+
+You can output a configuration file with all fields commented out and with
+comments containing the documentation for each field. Supported languages:
+
+- `toml`
+- `dhall`
+- `yaml`
+
+TODO: output example
+
+Because JSON does not support comments, it is not supported.
+
+### Man page
+
+You can output a man page (roff). This will be named `CRATE_NAME(5)` (Section 5
+is for file formats and configuration files.) You can opt to specify a
+configuration language to use for the man page, or it will be written in a
+language-independent style.
+
+TODO: output example
+
+### JSON
+
+The JSON output format describes everything that Figleaf knows about your
+configuration definition as well as its own configuration (version, which
+features were enabled, etc). This format is regulated by semver so it can be
+relied on.
+
+See the [`generators::json`] module documentation for the exhaustive reference.
 
