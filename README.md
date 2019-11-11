@@ -108,7 +108,7 @@ Stricken items are not (or only partially) implemented yet.
     * ~~[Standalone](#standalone-use)~~
     * ~~[Alongside serde](#alongside-serde)~~
     * ~~[Derived fields](#derived-fields)~~
-    * ~~[Switched fields]~~
+    * ~~[Switched fields](#switched-fields)~~
     * ~~[Documentation comments]~~
     * ~~[Contextual documentation]~~
     * ~~[Conditionals]~~
@@ -373,4 +373,32 @@ fn derivation(partial: &Config) -> String {
 
 #### Switched fields
 
+**In most cases, prefer derived fields.** However, in some cases, having the
+loaded value hanging around is undesirable, or you may need to consume the
+loaded value to create the derived one and don't want to add an `Option` in.
+
+Whatever the reason, switched fields have one type when loading, and another
+type once constructed. They can also be the same type in both cases, but with
+the loaded value being passed as owned to the switching function.
+
+```rust
+#[figleaf]
+#[derive(Deserialize)]
+struct Config {
+    #[figleaf(switch_from = usize, switch_with = switcher)]
+    switched: String,
+}
+
+fn switcher(value: usize, _partial: &Config) -> String {
+  format!("{}", value * 2)
+}
+```
+
+While merely discouraged in the case of derived fields, **accessing a switched
+field from the `partial` reference is strictly forbidden** and _is always
+undefined behaviour_.
+
+A switched field cannot also be a derived field and vice versa.
+
+The `switch_with` function defaults to calling `.into()` if not provided.
 
