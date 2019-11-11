@@ -109,9 +109,9 @@ Stricken items are not (or only partially) implemented yet.
     * ~~[Alongside serde](#alongside-serde)~~
     * ~~[Derived fields](#derived-fields)~~
     * ~~[Switched fields](#switched-fields)~~
-    * ~~[Documentation comments]~~
-    * ~~[Contextual documentation]~~
-    * ~~[Conditionals]~~
+    * ~~[Documentation comments](#documentation-comments)~~
+    * ~~[Contextual documentation](#contextual-documentation)~~
+    * ~~[Conditionals](#runtime-field-conditions)~~
 - ~~[Generators]~~
   + ~~[Readme]~~
   + ~~[Example config file]~~
@@ -401,4 +401,95 @@ undefined behaviour_.
 A switched field cannot also be a derived field and vice versa.
 
 The `switch_with` function defaults to calling `.into()` if not provided.
+
+#### Documentation comments
+
+Documentation comments on fields and the structure itself are used to render
+description and help text in generated representations:
+
+- error messages
+- readme generator
+- man page generator
+- example config file generator
+
+To disable using this documentation, use the `#[figleaf(no_doc)]` attribute. To
+disable this behaviour for all fields, add `#[figleaf(opt_in_docs)]` to the
+top-level. When that is set, `#[figleaf(use_doc)]` on fields can be used to opt
+in on a field-by-field basis.
+
+#### Contextual documentation
+
+Some documentation may be superfluous in some formats or only make sense in
+others. It is possible to include or exclude all or part of any documentation
+comment based on the generation target, in two different forms: inline to doc
+comments, or as attributes.
+
+```rust
+/// The first documentation paragraph/line.
+///
+/// Common information.
+///
+/// # [figleaf(target = "man")]
+///
+/// This section is only shown on the man page.
+///
+/// # [figleaf(not(target = "rustdoc"))]
+///
+/// This section is not shown in the rustdoc output.
+field: Item,
+```
+
+```rust
+#[figleaf(target_doc("man", "This string replaces the documentation entirely for man pages"))]
+#[figleaf(target_doc("commonmark", "This replaces the readme description")]
+field: Item,
+```
+
+These doc targets are available by default:
+
+- `rustdoc`: default/rustdoc output
+- `man`: man pages
+- `example`: example config file
+- `commonmark`: readme/commonmark/markdown documentation
+
+#### Runtime field conditions
+
+Using conditional attributes, fields can be skipped or included based on
+_runtime_ conditions. For compile-time conditionals, use Rust's own `cfg`
+attributes.
+
+```rust
+#[figleaf]
+#[derive(Deserialize)]
+struct Config {
+    #[figleaf(skip_on(source = "lang:toml"))]
+    skipped_for_toml: bool,
+
+    #[figleaf(only_on(source = "lang:dhall"))]
+    only_when_loading_from_dhall: bool,
+
+    #[figleaf(skip_on(custom = "skipper"))]
+    custom_runtime_skip: bool,
+
+    #[figleaf(only_on(custom = "includer"))]
+    custom_runtime_include: bool,
+}
+
+fn skipper(_partial: &Config) -> bool {
+    /* skip = */ true
+}
+
+fn includer(_partial: &Config) -> bool {
+    /* include = */ true
+}
+```
+
+Available conditional attributes:
+
+- `lang:*`: configuration language used to load this structure
+- `custom`: custom function
+- `reload`: `"true"` when the config is being reloaded
+- `singleton`: `"true"` when loading as a singleton
+- `source`: `file`, `env`, `args`, `db:*`...
+- TODO: more
 
