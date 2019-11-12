@@ -117,14 +117,14 @@ Stricken items are not (or only partially) implemented yet.
   + ~~[Example config file](#example-configuration-file)~~
   + ~~[Man page](#man-page)~~
   + ~~[JSON](#json)~~
-- ~~[Loading]~~
-  + ~~[Async]~~
-  + ~~[Blocking] /* async but with a quick block_on() wrapper */~~
-  + ~~[Sync] /* without async at all (feature-gated) */~~
-  + ~~[Singleton]~~
-    * ~~[Once]~~
-    * ~~[Lazy]~~
-    * ~~[With main]~~
+- ~~[Loading](#loading)~~
+  + ~~[Async](#async)~~
+  + ~~[Blocking](#blocking)~~
+  + ~~[Sync](#all-synchronous)~~
+  + ~~[Singleton](#singleton)~~
+    * ~~[Eager](#static-config-loaded-eagerly)~~
+    * ~~[Lazy](#static-config-loaded-lazily)~~
+    * ~~[With main](#dynamic-config-in-main)~~
   + ~~[Recursive reconfiguration]~~
 - ~~[In libraries]~~
   + ~~[Usage]~~
@@ -554,3 +554,177 @@ relied on.
 
 See the [`generators::json`] module documentation for the exhaustive reference.
 
+## Loading
+
+Figleaf supports different APIs for loading the configuration. The main
+distinction is around asynchronicity. There is also a singleton style with
+several variants.
+
+### Async
+
+The default loading style uses async:
+
+```rust
+use figleaf::prelude::*;
+
+#[figleaf]
+#[derive(Deserialize)]
+struct Config { etc: bool }
+
+let config = Config::auto().await?;
+```
+
+The [`auto`] function selects all defaults and finalises the builder, which
+resolves into a Future which is then `await`ed into a Result.
+
+Constructing a builder manually:
+
+```rust
+use figleaf::prelude::*;
+
+#[figleaf]
+#[derive(Deserialize)]
+struct Config { etc: bool }
+
+let builder = Config::build()
+  .basename("parka")
+  .languages(&[Language::TOML, Language::JSON])
+  .finalise()
+  .await?;
+```
+
+### Blocking
+
+If dealing with awaiting futures is too much trouble, there is a blocking API
+which embeds an async executor. To reduce depedencies in the default case, this
+is behind a feature.
+
+```toml
+[dependencies.figleaf]
+version = "..."
+features = ["load:blocking"]
+```
+
+```rust
+use figleaf::prelude::*;
+
+#[figleaf]
+#[derive(Deserialize)]
+struct Config { etc: bool }
+
+let builder = Config::build()
+  .basename("parka")
+  .languages(&[Language::TOML, Language::JSON])
+  .finalise_blocking()?;
+```
+
+Note the different finalise function.
+
+### All-synchronous
+
+Embedding an executor adds a lot of dependencies, and using async IO does too,
+and may be complicated in some environments. Whatever the reason, there is also
+an all-synchronous API, which uses synchronous IO from the stdlib instead of
+async IO:
+
+```toml
+[dependencies.figleaf]
+version = "..."
+features = ["load:sync"]
+```
+
+```rust
+use figleaf::prelude::*;
+
+#[figleaf]
+#[derive(Deserialize)]
+struct Config { etc: bool }
+
+let builder = Config::build()
+  .basename("parka")
+  .languages(&[Language::TOML, Language::JSON])
+  .finalise_sync()?;
+```
+
+It is recommended to disable default features and only using this loading
+feature in this case, to cut down dependencies and code size / compile time.
+
+### Singleton
+
+A common pattern is to load config at program start, put it in a static, and
+have it be available to all parts of your program without passing a variable
+around. Figleaf's singleton support streamlines this, and comes in three
+variants.
+
+In all cases, the default `auto()` builder is used unless a builder function is
+provided:
+
+```rust
+use figleaf::prelude::*;
+
+#[figleaf(singleton = "eager", singleton_builder = builder)]
+#[derive(Deserialize)]
+struct Config { etc: bool }
+
+fn builder() -> figleaf::Builder<Config> {
+  Config::build()
+    .basename("polo")
+}
+```
+
+#### Static config, loaded eargerly
+
+```rust
+use figleaf::prelude::*;
+
+#[figleaf(singleton = "eager")]
+#[derive(Deserialize)]
+struct Config { etc: bool }
+
+dbg!(Config::singleton().etc);
+```
+
+This variant loads at program start, without needing a hook in `main`. Errors
+encountered while loading panic.
+
+#### Static config, loaded lazily
+
+```rust
+use figleaf::prelude::*;
+
+#[figleaf(singleton = "lazy")]
+#[derive(Deserialize)]
+struct Config { etc: bool }
+
+dbg!(Config::singleton().etc);
+```
+
+This variant is like the eager one, but does nothing at program start, and is
+instead loaded on the first access.
+
+#### Dynamic config, in main
+
+If more context is needed to create the builder, or error handling is required,
+the singleton can be created from your own code (i.e. in main):
+
+```rust
+use figleaf::prelude::*;
+
+#[figleaf(singleton = "lazy")]
+#[derive(Deserialize)]
+struct Config { etc: bool }
+
+fn main() -> Result<Box<dyn std::error::Error>> {
+  let args = get_some_args()?;
+  Config::build().basename(args.config_name).as_singleton_sync()?;
+
+  dbg!(Config::singleton().etc);
+}
+
+dbg!(Config::singleton().etc);
+```
+
+The `as_singleton` method supports the same loading features as the
+`finalise()` method (here shown with `load:sync`).
+
+### Recursive reconfiguration
