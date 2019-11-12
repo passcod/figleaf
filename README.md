@@ -216,7 +216,6 @@ Stricken items are not (or only partially) implemented yet.
   + ~~[Hardware tokens]~~
   + ~~[Serial]~~
   + ~~[Block device]~~
-  + ~~[Signals]~~
 - ~~[Reloading]~~
   + ~~[Watching and polling]~~
   + ~~[Signals]~~
