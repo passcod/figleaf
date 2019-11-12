@@ -125,7 +125,7 @@ Stricken items are not (or only partially) implemented yet.
     * ~~[Eager](#static-config-loaded-eagerly)~~
     * ~~[Lazy](#static-config-loaded-lazily)~~
     * ~~[With main](#dynamic-config-in-main)~~
-  + ~~[Recursive reconfiguration]~~
+- ~~[Recursive reconfiguration](#recursive-reconfiguration)~~
 - ~~[In libraries]~~
   + ~~[Usage]~~
   + ~~[Discovery]~~
@@ -234,6 +234,7 @@ Stricken items are not (or only partially) implemented yet.
     * ~~[By method]~~
     * ~~[By file]~~
     * ~~[By key]~~
+  + ~~[From hardware module]~~
   + ~~[Secrets in memory]~~
 
 ## Definition of configuration structure
@@ -727,4 +728,33 @@ dbg!(Config::singleton().etc);
 The `as_singleton` method supports the same loading features as the
 `finalise()` method (here shown with `load:sync`).
 
-### Recursive reconfiguration
+## Recursive reconfiguration
+
+Recursive reconfiguration is one of our flagship advanced features. To
+understand what it does, consider the simple case of an environment variable
+that dictates what the configuration files are named: in a traditional system,
+this would either need two separate systems (loading and parsing the
+environment, and loading the configuration), loading the configuration twice
+based on a condition, or some other manual process.
+
+Here, instead, as long as you tell Figleaf about it, it will take care of
+recursively loading configuration, checking reconfiguration fields, and
+adjusting until done.
+
+This makes possible complex scenarios, such as (all subject to configuration,
+none of these are Figleaf default strategies):
+
+- changing the prefix of environment variables from an environment variable;
+- specifying a `DATABASE_URL` to enable loading the rest of the config from a
+  database table;
+- a `zeroconfig_ns=` key in a TOML file points to a Zeroconfig namespace on the
+  local network where a configuration server listening on a TCP port advertises
+  its address;
+- the PCI address of a hardware token is provided via a blob concatenated to
+  the binary, which is used to decrypt the rest of the concat'd blob into
+  configuration secrets; meanwhile the innoffensive part of the config is
+  loaded from plain text file as per normal.
+
+TODO: how
+
+
