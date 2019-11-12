@@ -126,7 +126,7 @@ Stricken items are not (or only partially) implemented yet.
     * ~~[Lazy](#static-config-loaded-lazily)~~
     * ~~[With main](#dynamic-config-in-main)~~
 - ~~[Recursive reconfiguration](#recursive-reconfiguration)~~
-- ~~[In libraries]~~
+- ~~[In libraries](#in-libraries)~~
   + ~~[Usage]~~
   + ~~[Discovery]~~
   + ~~[Overrides]~~
@@ -755,6 +755,20 @@ none of these are Figleaf default strategies):
   configuration secrets; meanwhile the innoffensive part of the config is
   loaded from plain text file as per normal.
 
-TODO: how
+TODO: usage
 
+## In libraries
 
+Figleaf can be used in libraries, not just top-level applications.
+
+If a library needs configuration, in addition to offering a configuration
+struct to its consumers to be completed at their discretion, it can request
+configuration via Figleaf, with the same power features as usual Figleaf usage.
+
+The difference is that the top-level application always can have control if it
+so decides. It can discover configuration requests, and intercept, redirect,
+remap, override... them. If the top-level application either doesn't use
+Figleaf or doesn't interfere with library configuration requests, things
+proceed as usual.
+
+### TODO: the rest
