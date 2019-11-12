@@ -236,6 +236,14 @@ Stricken items are not (or only partially) implemented yet.
     * ~~[By key]~~
   + ~~[From hardware module]~~
   + ~~[Secrets in memory]~~
+- ~~[Bindings]~~
+  + ~~[C/C++]~~
+  + ~~[Node.js]~~
+  + ~~[Deno]~~ /* 1) via wasm, with deno-sided fs/env/args links; 2) as native op crate once that lands in deno */
+  + ~~[WASM]~~
+  + ~~[Ruby]~~
+  + ~~[PHP]~~
+  + ~~[Swift]~~
 
 ## Definition of configuration structure
 
