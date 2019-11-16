@@ -1,13 +1,11 @@
 # Figleaf
 
-Experiment around [a modern-style `config`][config-111].
+_“Crackfic-taken-seriously in the form of an open-source project readme,” the configuration library._
 
-[config-111]: https://github.com/mehcode/config-rs/issues/111
-
- - **Not published on crates.io**
- - MSRV: latest stable, no version bump
- - License: [Artistic 2.0](./LICENSE)
- - API Documentation: https://passcod.name/figleaf/
+- **Not published on crates.io**
+- MSRV: latest stable, no version bump
+- License: [Artistic 2.0](./LICENSE)
+- API Documentation: https://passcod.name/figleaf/
 
 ## Quick-start
 
@@ -43,14 +41,15 @@ dbg!(settings);
 
 This will read from:
 
- - Environment: `CRATENAME_USERNAME`, etc.
- - Config files named `cratename.ext`, where `ext` is any of the
-   [supported formats][formats], in a hierarchy of overrides:
-   + Local: working directory
-   + Runtime: `/run` and equivalents
-   + User: `XDG_CONFIG_PATH/CRATENAME/` and equivalents
-   + System: `/etc/CRATENAME/` and equivalents
-   + Vendor: `/usr/lib/CRATENAME/` and equivalents
+- Environment: `CRATENAME_USERNAME`, etc.
+- Config files named `cratename.ext`, where `ext` is any of the
+  [default supported languages](#the-default-set), in a hierarchy
+  of overrides:
+  + Local: working directory
+  + Runtime: `/run` and equivalents
+  + User: `XDG_CONFIG_PATH/CRATENAME/` and equivalents
+  + System: `/etc/CRATENAME/` and equivalents
+  + Vendor: `/usr/lib/CRATENAME/` and equivalents
 
 Overrides are top-level only and additive for collections. That is:
 
@@ -242,6 +241,9 @@ Stricken items are not (or only partially) implemented yet.
   + ~~[Ruby]~~
   + ~~[PHP]~~
   + ~~[Swift]~~
+- ~~[Appendices]~~
+  + ~~[Feature reference]~~
+  + ~~[Optimisation guidelines]~~
 
 ## Definition of configuration structure
 
