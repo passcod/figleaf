@@ -99,6 +99,7 @@ Settings {
 
 Stricken items are not (or only partially) implemented yet.
 
+- ~~[Concepts]~~
 - ~~[Definition](#definition-of-configuration-structure)~~
   + ~~[Arbitrary](#arbitrary-value)~~
   + ~~[Serde deserialisable](#serde-deserialisable-only)~~
@@ -132,16 +133,13 @@ Stricken items are not (or only partially) implemented yet.
   + ~~[Overrides]~~
   + ~~[Excludes]~~
   + ~~[Remapping]~~
-- ~~[Languages]~~
-  + ~~[Defaults]~~
-  + ~~[Compile-time selection]~~
-  + ~~[Additional]~~
-    * ~~[Via cargo features]~~
-    * ~~[Via plugins]~~
-  + ~~[Runtime selection]~~
-  + ~~[File extentions and mimetypes]~~
-  + ~~[Auto-detection]~~
-  + ~~[Preprocessing]~~
+- ~~[Languages](#languages)~~
+  + ~~[Defaults](#the-default-set)~~
+  + ~~[Compile-time selection](#compile-time-selection)~~
+  + ~~[Additional](#using-additional-languages)~~
+  + ~~[Runtime selection](#runtime-selection)~~
+  + ~~[File extentions and mimetypes](#file-exensions-and-mimetypes)~~
+  + ~~[Auto-detection](#auto-detection)~~
 - ~~[Environment]~~
   + ~~[Key format (prefix, etc)]~~
   + ~~[Value parsing]~~
@@ -204,6 +202,7 @@ Stricken items are not (or only partially) implemented yet.
 - ~~[Platorm-specific]~~
   + ~~[D-Bus]~~
   + ~~[Windows COM]~~
+  + ~~[Windows Registry]~~
   + ~~[Apple Events]~~
   + ~~[Virtual filesystems]~~
 - ~~[Special]~~
@@ -779,3 +778,110 @@ Figleaf or doesn't interfere with library configuration requests, things
 proceed as usual.
 
 ### TODO: the rest
+
+## Languages
+
+Configuration languages are used to parse files and file-like inputs. Figleaf
+works exclusively with Serde-implemented languages (Serde calls them
+“formats”). There are several ways to select which languages are available, and
+which is used.
+
+### The default set
+
+- [JSON](https://en.wikipedia.org/wiki/JSON). Feature: `lang:json`.
+- [TOML](https://en.wikipedia.org/wiki/TOML). Feature: `lang:toml`.
+- [YAML](https://en.wikipedia.org/wiki/YAML). Feature: `lang:yaml`.
+- [Dhall](https://dhall-lang.org). Feature: `lang:dhall`.
+
+JSON, TOML, and YAML are the most used configuration languages.
+
+Dhall is the author’s hope for a better configuration standard.
+
+### Compile-time selection
+
+All built-in languages are feature-gated (with the default set being included
+in the crate’s default features), all denoted by `lang:` as demonstrated above.
+
+The non-default built-in languages are:
+
+- [Human JSON](https://hjson.org). Feature: `lang:hjson`.
+- [HOCON](https://github.com/lightbend/config/blob/master/HOCON.md). Feature: `lang:hocon`.
+- [INI](https://en.wikipedia.org/wiki/INI_file). Feature: `lang:ini`.
+- [JSON5](https://json5.org). Feature: `lang:json5`.
+- [MuON](https://github.com/muon-data/muon). Feature: `lang:muon`.
+- [PHP `serialize`](https://www.php.net/manual/en/function.serialize.php). Feature: `lang:php`.
+- [RON](https://github.com/ron-rs/ron). Feature: `lang:ron`.
+- [S-expressions using `lexpr`](https://github.com/rotty/lexpr-rs). Feature: `lang:lexpr`.
+- [XML](https://en.wikipedia.org/wiki/XML). Feature: `lang:xml`.
+
+The (not recommended apart from prototyping and testing) `lang:all` feature
+includes all supported built-in languages.
+
+### Using additional languages
+
+Using more languages than the built-in ones is possible: all that's needed is a
+serde format library, a conversion from its `Value` type to Figleaf’s, and an
+extension/mime-type list.
+
+TODO: example
+
+### Runtime selection
+
+By default, all languages compiled-in are used. However, selecting languages
+can be done at runtime.
+
+TODO: example
+
+### File extensions and mimetypes
+
+Each language has one or more associated file extensions and one or more IANA
+media type (commonly known as “mimetype”). The built-in ones are:
+
+|    Language    | Extensions            | Media types |
+|:--------------:|:----------------------|:------------|
+| Human JSON     | `hjson`               | `application/hjson` |
+| HOCON          | `hocon`, `hoconf` [1] | `application/hocon` |
+| INI            | `ini`                 | `application/textedit`, `zz-application/zz-winassoc-ini` |
+| JSON           | `json`                | `application/json` |
+| JSON5          | `json5`               | `application/json5` |
+| MuON           | `muon`                | (none) |
+| PHP’s serialize| (none)                | (none) |
+| RON            | `ron`                 | (none) |
+| S-expressions  | (none)                | (none) |
+| TOML           | `toml`                | `application/toml` |
+| XML            | `xml`                 | `application/xml` |
+| YAML           | `yaml`, `yml`         | `application/yaml`, `application/x-yaml`, `text/yaml` |
+
+<sup>
+[1] HOCON’s default is `.conf`, but that is supremely ambiguous.
+You can still opt-in to this usage with `.add_extension(Language::Hocon, "conf")`.
+</sup>
+
+Extensions are used when reading files, media types when reading streams with
+an indicated content type or when detecting content type e.g. with a “magic”
+database. It’s always possible to add or override the extensions and media
+types for a language:
+
+```rust
+builder
+  .add_extension(Language::YAML, "yuml")
+  .set_mediatypes(Language::YAML, &["application/yuml"])
+```
+
+### Auto-detection
+
+For streams, files, or file-like sources without a content type indication or
+extension, type can be auto-detected. There are three ways to achieve this:
+
+1. Trying all enabled formats in turn until one doesn’t error. This is the
+   default, as it is easiest, even though it is innefficient and may result in
+   false-positives and errors.
+
+2. Using a “magic” database. Enabled with the `magic-detect` feature. The
+   general principle is that the first few hundred bytes of a file are read and
+   a series of heuristics are applied. This returns a media type, which is used
+   as defined above. In case nothing is found, falls back to 1.
+
+3. Providing a function that takes the source information and returns a
+   `Language::` enum variant or `None`. Falls back to 1 (or 2 if enabled).
+
