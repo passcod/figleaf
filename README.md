@@ -942,3 +942,11 @@ TODO: example
 
 TODO: [libfig] link
 
+## Environment
+
+- Feature: `source:env`.
+- Enabled by default.
+- Can be dynamic.
+- Not in libfigleaf.
+
+Environment variables 
