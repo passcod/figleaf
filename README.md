@@ -139,6 +139,10 @@ Stricken items are not (or only partially) implemented yet.
   + ~~[Runtime selection](#runtime-selection)~~
   + ~~[File extentions and mimetypes](#file-exensions-and-mimetypes)~~
   + ~~[Auto-detection](#auto-detection)~~
+- ~~[Sources](#sources)~~
+  + ~~[Features](#features)~~
+  + ~~[Filtering](#filtering)~~
+  + ~~[Dynamic](#dynamic)~~
 - ~~[Environment]~~
   + ~~[Key format (prefix, etc)]~~
   + ~~[Value parsing]~~
@@ -244,6 +248,7 @@ Stricken items are not (or only partially) implemented yet.
 - ~~[Appendices]~~
   + ~~[Feature reference]~~
   + ~~[Optimisation guidelines]~~
+  + ~~[Pre-built artifacts]~~
 
 ## Definition of configuration structure
 
@@ -886,4 +891,53 @@ extension, type can be auto-detected. There are three ways to achieve this:
 
 3. Providing a function that takes the source information and returns a
    `Language::` enum variant or `None`. Falls back to 1 (or 2 if enabled).
+
+## Sources
+
+Most of the sections below deal with the various kinds of configuration sources
+that Figleaf supports, either out of the box or as features. Sources are where
+configuration lives and is pulled from into your program.
+
+### Features
+
+Each source has its corresponding feature namespaced under `source:`. To see the
+full list of source features, check out [the appendix].
+
+### Filtering
+
+By default, if a source is compiled in (if its feature is enabled), it is used.
+Source filtering takes a [Pattern] and matches on source names: positive matches
+are allowed. For security-sensitive applications, source safelisting may be
+important, though disabling sources at compilation time is likely better.
+
+Source filtering can also be used in recursive reconfiguration scenarios, with
+a configuration option enabling more configuration sources.
+
+TODO: example
+
+### Dynamic
+
+Enabling a source via its feature increases compilation time and bloats the
+compiled size of the program. While it would be great to always support all
+kinds of sources so end-users have the greatest flexibility, this is often
+impractical. Figleaf attempts to mitigate this via shared libraries.
+
+Support is enabled by default and toggled with the `source:dynamic` feature.
+This means that if [the `libfigleaf.so` or `ligfigleaf.dll` library][libfig] is
+available at a standard system location, Figleaf will load it and enable every
+source available via that library, unless source filtering has been enabled.
+
+The [`default:minimal` feature profile] heavily relies on dynamic source
+support: along with other optimisations, it enables _only_ environment as a
+built-in source, and delegates all other sources to the shared library.
+
+Not all sources are available dynamically, and not all of these are compiled in
+[the pre-built Figleaf library distribution][libfig].
+
+You can configure the library path and name, and you can compile your own
+Figleaf shared library with different features enabled.
+
+TODO: example
+
+TODO: [libfig] link
 
