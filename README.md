@@ -246,6 +246,7 @@ Stricken items are not (or only partially) implemented yet.
   + ~~[PHP]~~
   + ~~[Swift]~~
 - ~~[Appendices]~~
+  + ~~[Feature profiles]~~
   + ~~[Feature reference]~~
   + ~~[Optimisation guidelines]~~
   + ~~[Pre-built artifacts]~~
