@@ -239,9 +239,9 @@ Stricken items are not (or only partially) implemented yet.
   + ~~[Secrets in memory]~~
 - ~~[Bindings]~~
   + ~~[C/C++]~~
+  + ~~[WASM]~~ /* with optional inbound bindings to provide fs etc access */
   + ~~[Node.js]~~
   + ~~[Deno]~~ /* 1) via wasm, with deno-sided fs/env/args links; 2) as native op crate once that lands in deno */
-  + ~~[WASM]~~
   + ~~[Ruby]~~
   + ~~[PHP]~~
   + ~~[Swift]~~
@@ -892,6 +892,8 @@ extension, type can be auto-detected. There are three ways to achieve this:
 
 3. Providing a function that takes the source information and returns a
    `Language::` enum variant or `None`. Falls back to 1 (or 2 if enabled).
+
+TODO: builder example code for 2 and 3
 
 ## Sources
 
