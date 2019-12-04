@@ -143,7 +143,7 @@ Stricken items are not (or only partially) implemented yet.
   + ~~[Features](#features)~~
   + ~~[Filtering](#filtering)~~
   + ~~[Dynamic](#dynamic)~~
-- ~~[Environment]~~
+- ~~[Environment](#environment)~~
   + ~~[Key format (prefix, etc)]~~
   + ~~[Value parsing]~~
   + ~~[Blobs]~~
@@ -947,8 +947,20 @@ TODO: [libfig] link
 ## Environment
 
 - Feature: `source:env`.
-- Enabled by default.
-- Can be dynamic.
-- Not in libfigleaf.
+- Default: yes.
+- Reloadable: yes.
+- Writable: yes.
+- Can be dynamic: yes.
+- In libfigleaf: **no**.
 
-Environment variables 
+Environment variables are key-value pairs provided by the operating system to
+a process and its children. Keys and values are arbitrary byte strings, with the
+notable exception of the null byte (0x00) being disallowed in both. In practice,
+non-ascii keys are discouraged, and `UPPER_SNAKE_CASE` is conventional.
+
+Environment variables may be written to by the process itself. Child processes
+and other processes (including root) cannot change a process's environment once
+that process has been created. Nevertheless, environment may be written to by
+other parts of the program, and thus this source does have reloading support.
+
+### Key format
