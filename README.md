@@ -140,8 +140,8 @@ Stricken items are not (or only partially) implemented yet.
   + ~~[File extentions and mimetypes](#file-exensions-and-mimetypes)~~
   + ~~[Auto-detection](#auto-detection)~~
 - ~~[Sources](#sources)~~
-  + ~~[Features](#features)~~
-  + ~~[Filtering](#filtering)~~
+  + ~~[Compile-time selection](#compiling-in)~~
+  + ~~[Runtime filtering](#filtering)~~
   + ~~[Dynamic](#dynamic)~~
 - ~~[Environment](#environment)~~
   + ~~[Key format (prefix, etc)]~~
@@ -901,10 +901,25 @@ Most of the sections below deal with the various kinds of configuration sources
 that Figleaf supports, either out of the box or as features. Sources are where
 configuration lives and is pulled from into your program.
 
-### Features
+Each different source described starts out with a table like this:
 
-Each source has its corresponding feature namespaced under `source:`. To see the
-full list of source features, check out [the appendix].
+| Feature        | `source:<name>` ||
+|:---------------|:----------:|:--------------------------------------------------------------|
+| Default        | yes/**no** | Is it in the default feature set?                             |
+| Reloadable     | yes/**no** | Is it [reloadable]?                                           |
+| Watchable      | yes/**no** | If it is reloadable, can changes be detected without polling? |
+| Writable       | yes/**no** | Does it support [writing back to the source]?                 |
+| Can be dynamic | yes/**no** | Can it be built into a shared library? (see below)            |
+| In libfigleaf  | yes/**no** | Is it in the default shared library build?                    |
+| WASM           | yes/**no** | Can it be [used in Web Assembly]? (potentially needing binds) |
+
+### Compiling-in
+
+Each source can be compiled-in (to compiled-out default features, use
+`default-features = true`) with crate feature names namespaced under `source:`.
+To see the full list of source features, check out [the appendix].
+
+Also see the [feature profiles] section for presets.
 
 ### Filtering
 
@@ -946,12 +961,9 @@ TODO: [libfig] link
 
 ## Environment
 
-- Feature: `source:env`.
-- Default: yes.
-- Reloadable: yes.
-- Writable: yes.
-- Can be dynamic: yes.
-- In libfigleaf: **no**.
+| Feature | Default | Reloadable | Watchable | Writable | Dynamic | In libfigleaf | WASM |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| `source:env` | yes | yes | **no** | yes | yes | **no** | yes |
 
 Environment variables are key-value pairs provided by the operating system to
 a process and its children. Keys and values are arbitrary byte strings, with the
@@ -964,3 +976,5 @@ that process has been created. Nevertheless, environment may be written to by
 other parts of the program, and thus this source does have reloading support.
 
 ### Key format
+
+
