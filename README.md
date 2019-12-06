@@ -142,7 +142,6 @@ Stricken items are not (or only partially) implemented yet.
 - ~~[Sources](#sources)~~
   + ~~[Compile-time selection](#compiling-in)~~
   + ~~[Runtime filtering](#filtering)~~
-  + ~~[Dynamic](#dynamic)~~
 - ~~[Environment](#environment)~~
   + ~~[Key format (prefix, etc)]~~
   + ~~[Value parsing]~~
@@ -962,26 +961,6 @@ Source filtering can also be used in recursive reconfiguration scenarios, with
 a configuration option enabling more configuration sources.
 
 TODO: example
-
-### Dynamic
-
-Enabling a source via its feature increases compilation time and bloats the
-compiled size of the program. While it would be great to always support all
-kinds of sources so end-users have the greatest flexibility, this is often
-impractical. Figleaf attempts to mitigate this via shared libraries.
-
-Support is enabled by default and toggled with the `source:dynamic` feature.
-This means that if [the `libfigleaf.so` or `ligfigleaf.dll` library][libfig] is
-available at a standard system location, Figleaf will load it and enable every
-source available via that library, unless source filtering has been enabled.
-
-The [`default:minimal` feature profile] heavily relies on dynamic source
-support: along with other optimisations, it enables _only_ environment as a
-built-in source, and delegates all other sources to the shared library.
-
-More details are in [the libfigleaf appendix](#libfigleaf), including how to
-configure loading the library, how to get and distribute the prebuilt default
-version and what it contains, and how to build and load your own.
 
 ## Environment
 
