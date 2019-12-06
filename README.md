@@ -1027,7 +1027,7 @@ no languages, and delegates all else to the shared library.
 The Figleaf project provides a pre-built distribution of libfigleaf for:
 
 - Always: x86_64 and i686 Linux (libc and musl), Windows (MSVC), x86_64 macOS
-- Usually: x86_64 FreeBSD, Android, ARM64 iOS, Linux (libc), WASM32
+- Usually: x86_64 FreeBSD, Android, ARM64 iOS, Linux (libc), WASM32 (see [Bindings])
 - Best effort: x86_64 NetBSD, OpenBSD, Fuchsia, Redox, ARM64 Linux (musl)
 
 The distribution is not built for every Figleaf release, and is versioned
