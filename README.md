@@ -237,19 +237,19 @@ Stricken items are not (or only partially) implemented yet.
     * ~~[By key]~~
   + ~~[From hardware module]~~
   + ~~[Secrets in memory]~~
-- ~~[Bindings]~~
-  + ~~[C/C++]~~
-  + ~~[WASM]~~ /* with optional inbound bindings to provide fs etc access */
-  + ~~[Node.js]~~
-  + ~~[Deno]~~ /* 1) via wasm, with deno-sided fs/env/args links; 2) as native op crate once that lands in deno */
-  + ~~[Ruby]~~
-  + ~~[PHP]~~
-  + ~~[Swift]~~
-- ~~[Appendices]~~
+- ~~[Appendices](#appendices)~~
   + ~~[libfigleaf](#libfigleaf)~~
   + ~~[Feature profiles]~~
   + ~~[Feature reference]~~
   + ~~[Optimisation guidelines]~~
+  + ~~[Bindings]~~
+    * ~~[C/C++]~~
+    * ~~[WASM]~~ /* with optional inbound bindings to provide *s etc access */
+    * ~~[Node.js]~~
+    * ~~[Deno]~~ /* 1) via wasm, with deno-sided fs/env/args *inks; 2) as native op crate once that lands in deno */
+    * ~~[Ruby]~~
+    * ~~[PHP]~~
+    * ~~[Swift]~~
 
 ## Definition of configuration structure
 
@@ -1012,6 +1012,7 @@ mind when passing in secrets or sensitive information.</sup>
 - ~~[Feature profiles]~~
 - ~~[Feature reference]~~
 - ~~[Optimisation guidelines]~~
+- ~~[Bindings]~~
 
 ### libfigleaf
 
