@@ -143,7 +143,7 @@ Stricken items are not (or only partially) implemented yet.
   + ~~[Compile-time selection](#compiling-in)~~
   + ~~[Runtime filtering](#filtering)~~
 - ~~[Environment](#environment)~~
-  + ~~[Key format (prefix, etc)]~~
+  + ~~[Key format (prefix, etc)](#key-format)~~
   + ~~[Value parsing]~~
   + ~~[Blobs]~~
 - ~~[Arguments]~~
@@ -973,6 +973,12 @@ a process and its children. Keys and values are arbitrary byte strings, with the
 notable exception of the null byte (0x00) being disallowed in both. In practice,
 non-ascii keys are discouraged, and `UPPER_SNAKE_CASE` is conventional.
 
+(Technically, environment variables are a set of null-terminated byte strings,
+they're only key-value pairs in that this is how everything interprets them. Key
+and value are delimited by the first `=`, if present. Having no value or the
+empty string as a value is equivalent, and is generally interpreted as being
+unset, as there is no true way to unset a particular environment variable.)
+
 Environment variables may be written to by the process itself. Child processes
 and other processes (including root) cannot change a process's environment once
 that process has been created. Nevertheless, environment may be written to by
@@ -985,6 +991,45 @@ mind when passing in secrets or sensitive information.</sup>
 
 ### Key format
 
+The general convention for environment variables as configuration is to prefix
+keys with the name or a short identifier of the application. For example a
+program named Passionfruit may use the `PASSIONFRUIT_` or perhaps the `PASSION_`
+prefix.
+
+```rust
+.source_set(env::Prefix("PASSIONFRUIT_".into()))
+```
+
+When using the `auto!` macro, the prefix is set to the `UPPER_SNAKE_CASE`
+variant of the crate's name, appended with an underscore. Otherwise it defaults
+to no prefix (the empty string).
+
+Keys can be further transformed using an arbitrary function. By default, keys
+are treated as UTF-8 and lowercased, with non-UTF-8 bytes left alone. That
+transform can be disabled to leave keys as-is.
+
+```rust
+.source_set(env::KeyTransform(None))
+.source_set(env::KeyTransform(Some(|key: &[u8]| key.replace("leaves", "shoots"))))
+```
+
+<sup>Figleaf by default includes [bstr] and traits into its prelude, which is where
+the `replace` method above comes from. To opt-out, use the `inc:bstr` feature.)</sup>
+
+Transforming keys may result in collisions, which can be handled in various ways:
+
+- `env::Collision::LastWins` (the default), where every subsequent identical key
+  overrides the previous value, resulting in the "last" key "winning" overall.
+- `env::Collision::FirstWins`, where subsequent identical keys are ignored.
+- `env::Collision::Error`, where duplicate keys makes Figleaf return an error.
+- `env::Collision::Joined(":".into())`, where duplicate keys have their values joined
+  together with the given separator (e.g. `:`).
+
+```rust
+.source_set(env::Collision::Error)
+```
+
+### Value parsing
 
 
 
