@@ -897,6 +897,32 @@ TODO: builder example code for 2 and 3
 
 ## Sources
 
+- ~~[Environment](#environment)~~
+- ~~[Arguments]~~
+- ~~[Files]~~
+- ~~[Network]~~
+- ~~[Databases]~~
+  + ~~[Connection]~~
+  + ~~[Relational]~~
+  + ~~[Key-value]~~
+  + ~~[Document]~~
+- ~~[Platorm-specific]~~
+  + ~~[D-Bus]~~
+  + ~~[Windows COM]~~
+  + ~~[Windows Registry]~~
+  + ~~[Apple Events]~~
+  + ~~[Virtual filesystems]~~
+- ~~[Special]~~
+  + ~~[Standard input]~~
+  + ~~[Appended to binary]~~
+  + ~~[Shared memory]~~
+  + ~~[Keyring]~~
+  + ~~[Clipboard]~~
+  + ~~[EFI variables]~~
+  + ~~[Hardware tokens]~~
+  + ~~[Serial]~~
+  + ~~[Block device]~~
+
 Most of the sections below deal with the various kinds of configuration sources
 that Figleaf supports, either out of the box or as features. Sources are where
 configuration lives and is pulled from into your program.
@@ -977,6 +1003,15 @@ mind when passing in secrets or sensitive information.</sup>
 ### Key format
 
 
+
+
+
+## Appendices
+
+- ~~[libfigleaf](#libfigleaf)~~
+- ~~[Feature profiles]~~
+- ~~[Feature reference]~~
+- ~~[Optimisation guidelines]~~
 
 ### libfigleaf
 
