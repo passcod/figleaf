@@ -975,6 +975,11 @@ and other processes (including root) cannot change a process's environment once
 that process has been created. Nevertheless, environment may be written to by
 other parts of the program, and thus this source does have reloading support.
 
+<sup>Security note: by default environment variables are available to child
+processes (including when dropping privileges) and any other process running
+under the same user (or root). While there are various mitigations, keep this in
+mind when passing in secrets or sensitive information.</sup>
+
 ### Key format
 
 
