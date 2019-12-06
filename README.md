@@ -919,7 +919,7 @@ Each source can be compiled-in (to compiled-out default features, use
 `default-features = true`) with crate feature names namespaced under `source:`.
 To see the full list of source features, check out [the appendix].
 
-Also see the [feature profiles] section for presets.
+Also see the [feature profiles] appendix for presets.
 
 ### Filtering
 
