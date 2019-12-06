@@ -239,6 +239,10 @@ Stricken items are not (or only partially) implemented yet.
   + ~~[Secrets in memory]~~
 - ~~[Appendices](#appendices)~~
   + ~~[libfigleaf](#libfigleaf)~~
+    * ~~[Obtaining](#obtaining-libfigleaf)~~
+    * ~~[Customising](#custom-build)~~
+    * ~~[Configuring](#dynlib-loading-options)~~
+    * ~~[Disabling](#disabling-dynamic-loading)~~
   + ~~[Feature profiles]~~
   + ~~[Feature reference]~~
   + ~~[Optimisation guidelines]~~
@@ -983,7 +987,7 @@ version and what it contains, and how to build and load your own.
 
 | Feature | Default | Reloadable | Watchable | Writable | Dynamic | In libfigleaf | WASM |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| `source:env` | yes | yes | **no** | yes | yes | **no** | yes |
+| `source:env` | yes | yes | **no** | yes | yes | yes | yes |
 
 Environment variables are key-value pairs provided by the operating system to
 a process and its children. Keys and values are arbitrary byte strings, with the
@@ -1016,8 +1020,121 @@ mind when passing in secrets or sensitive information.</sup>
 
 ### libfigleaf
 
-Not all sources are available dynamically, and not all of these are compiled in
-[the pre-built Figleaf library distribution][libfig].
+Figleaf is enormous. It supports lots of languages, lots of sources, and lots of
+different options. Everything has a corresponding crate feature, so most of the
+library can be opt-in, or opt-out in the case of the default feature set. Yet
+every feature enabled has two costs: compilation time and binary size.
 
-You can configure the library path and name, and you can compile your own
-Figleaf shared library with different features enabled.
+Enabling all the languages and all the sources makes for a powerful and truly
+flexible configuration library, but a terrible developer experience. Enabling a
+subset in development and more for release builds is awkward and may introduce
+bugs in production not present or noticed in development! It's not great.
+
+**libfigleaf** is a shared library containing by default all built-in languages
+and nearly all built-in sources. Installed in a standard system location, it
+will be loaded by Figleaf and all available sources and languages enabled. Thus
+the main library can remain both powerful and pleasant to use.
+
+#### Obtaining libfigleaf
+
+The Figleaf project provides a pre-built distribution of libfigleaf for:
+
+- Always: x86_64 and i686 Linux (libc and musl), Windows (MSVC), x86_64 macOS
+- Usually: x86_64 FreeBSD, Android, ARM64 iOS, Linux (libc), WASM32
+- Best effort: x86_64 NetBSD, OpenBSD, Fuchsia, Redox, ARM64 Linux (musl)
+
+The distribution is not built for every Figleaf release, and is versioned
+separately. Current and previous releases, as well as packager instructions,
+can be found at https://passcod.name/figleaf/libfigleaf/. All downloads are
+signed using [minisign](https://jedisct1.github.io/minisign/). Public key:
+
+```
+1234567890qdrwbjfupashtgyneoizxmcvklQDRWBJFUPASHTGYNEOZX
+```
+
+To obtain libfigleaf on another platform, you need to build it. You can obtain
+source from either this repository or (preferably) a tarball of the source used
+to build the latest (or desired) libfigleaf release, also available and signed,
+as above. Building instructions are included. To build from here:
+
+```bash
+$ cd libfig
+$ cargo build --release
+$ cp target/release/libfig.so libfigleaf.so
+$ strip libfigleaf.so
+```
+
+Adjust for the correct filename/target/tooling.
+
+#### Custom build
+
+It is possible to build your own custom distribution of the library (do **not**
+call it "libfigleaf", that name must always refer to the default distribution).
+
+The libfig member crate supports Figleaf's `lang:` and `source:` feature sets.
+Refer to its `Cargo.toml` for more. Change the `default` feature key to include
+what you need, or specify them on the command line.
+
+You can also include your own custom sources and languages. Hook those up in
+`lib.rs` (search for `// custom language` and `// custom source`).
+
+Build as above.
+
+#### Dynlib loading options
+
+By default, Figleaf looks in system locations for the name `libfigleaf.V.EXT`
+where `V` is the major libfigleaf version compatible with this Figleaf release,
+and `EXT` is the platform-appropriate file extension (`so` or `dll`).
+
+In debug mode (when `debug_assertions` and/or `dynamic:debug` is on), it also
+looks in the working directory.
+
+You can change the places it looks in (tried in order):
+
+```rust
+.library_locations(&["/opt/figleaf/lib", "./inc"])
+```
+
+You can change the name it looks for (tried in order):
+
+```rust
+.library_names(&["libmapleleaf", "figfruit"])
+```
+
+You can change when it stops:
+
+```rust
+.library_multiple(true)
+```
+
+That one is false by default. When true, Figleaf will keep loading libraries
+it finds until it exhausts the locations × names list. That can be used to
+load e.g. the default distribution and a custom add-on library on top.
+
+The first version of a source or language found is used, and those compiled in
+take precedence overall. That is, it's not possible to override already-loaded
+implementations.
+
+#### Disabling dynamic loading
+
+You may want to disable for a variety of reasons, the most common being as a
+security concern.
+
+You can disable at runtime:
+
+```rust
+.library_load(false)
+```
+
+Or you can remove the feature set namespaced under `dynamic:`.
+
+You can also disable loading sources or languages only:
+
+```rust
+.library_load_sources(false)
+.library_load_languages(false)
+```
+
+Or via features: `dynamic:sources` and `dynamic:languages`.
+
+There are [feature profiles] preset without the dynamic features.
