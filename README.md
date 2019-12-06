@@ -246,10 +246,10 @@ Stricken items are not (or only partially) implemented yet.
   + ~~[PHP]~~
   + ~~[Swift]~~
 - ~~[Appendices]~~
+  + ~~[libfigleaf](#libfigleaf)~~
   + ~~[Feature profiles]~~
   + ~~[Feature reference]~~
   + ~~[Optimisation guidelines]~~
-  + ~~[Pre-built artifacts]~~
 
 ## Definition of configuration structure
 
@@ -949,15 +949,9 @@ The [`default:minimal` feature profile] heavily relies on dynamic source
 support: along with other optimisations, it enables _only_ environment as a
 built-in source, and delegates all other sources to the shared library.
 
-Not all sources are available dynamically, and not all of these are compiled in
-[the pre-built Figleaf library distribution][libfig].
-
-You can configure the library path and name, and you can compile your own
-Figleaf shared library with different features enabled.
-
-TODO: example
-
-TODO: [libfig] link
+More details are in [the libfigleaf appendix](#libfigleaf), including how to
+configure loading the library, how to get and distribute the prebuilt default
+version and what it contains, and how to build and load your own.
 
 ## Environment
 
@@ -983,3 +977,11 @@ mind when passing in secrets or sensitive information.</sup>
 ### Key format
 
 
+
+### libfigleaf
+
+Not all sources are available dynamically, and not all of these are compiled in
+[the pre-built Figleaf library distribution][libfig].
+
+You can configure the library path and name, and you can compile your own
+Figleaf shared library with different features enabled.
