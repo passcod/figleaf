@@ -1014,6 +1014,14 @@ and nearly all built-in sources. Installed in a standard system location, it
 will be loaded by Figleaf and all available sources and languages enabled. Thus
 the main library can remain both powerful and pleasant to use.
 
+Another advantage is that libfigleaf may be packaged separately, for example
+through a package manager, and shared between many application, further reducing
+size, as well as enabling updates to libfigleaf independently of your own app.
+
+The [`default:minimal` feature profile] heavily relies on libfigleaf: along with
+other optimisations, it enables only the environment variable source as built-in,
+no languages, and delegates all else to the shared library.
+
 #### Obtaining libfigleaf
 
 The Figleaf project provides a pre-built distribution of libfigleaf for:
