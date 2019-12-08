@@ -997,7 +997,8 @@ program named Passionfruit may use the `PASSIONFRUIT_` or perhaps the `PASSION_`
 prefix.
 
 ```rust
-.source_set(env::Prefix("PASSIONFRUIT_".into()))
+builder
+  .configure(env::Prefix("PASSIONFRUIT_"))
 ```
 
 When using the `auto!` macro, the prefix is set to the `UPPER_SNAKE_CASE`
@@ -1009,12 +1010,13 @@ are treated as UTF-8 and lowercased, with non-UTF-8 bytes left alone. That
 transform can be disabled to leave keys as-is.
 
 ```rust
-.source_set(env::KeyTransform(None))
-.source_set(env::KeyTransform(Some(|key: &[u8]| key.replace("leaves", "shoots"))))
+builder
+  .configure(env::KeyTransform(None))
+  .configure(env::KeyTransform(Some(|key: &[u8]| {
+    use bstr::ByteSlice; // provides .replace
+    key.replace("leaves", "shoots")
+  })))
 ```
-
-<sup>Figleaf by default includes [bstr] and traits into its prelude, which is where
-the `replace` method above comes from. To opt-out, use the `inc:bstr` feature.)</sup>
 
 Transforming keys may result in collisions, which can be handled in various ways:
 
@@ -1022,11 +1024,12 @@ Transforming keys may result in collisions, which can be handled in various ways
   overrides the previous value, resulting in the "last" key "winning" overall.
 - `env::Collision::FirstWins`, where subsequent identical keys are ignored.
 - `env::Collision::Error`, where duplicate keys makes Figleaf return an error.
-- `env::Collision::Joined(":".into())`, where duplicate keys have their values joined
+- `env::Collision::Joined(":")`, where duplicate keys have their values joined
   together with the given separator (e.g. `:`).
 
 ```rust
-.source_set(env::Collision::Error)
+builder
+  .configure(env::Collision::Error)
 ```
 
 ### Value parsing
@@ -1124,19 +1127,22 @@ looks in the working directory.
 You can change the places it looks in (tried in order):
 
 ```rust
-.library_locations(&["/opt/figleaf/lib", "./inc"])
+builder
+  .library_locations(&["/opt/figleaf/lib", "./inc"])
 ```
 
 You can change the name it looks for (tried in order):
 
 ```rust
-.library_names(&["libmapleleaf", "figfruit"])
+builder
+  .library_names(&["libmapleleaf", "figfruit"])
 ```
 
 You can change when it stops:
 
 ```rust
-.library_multiple(true)
+builder
+  .library_multiple(true)
 ```
 
 That one is false by default. When true, Figleaf will keep loading libraries
@@ -1155,7 +1161,8 @@ security concern.
 You can disable at runtime:
 
 ```rust
-.library_load(false)
+builder
+  .library_load(false)
 ```
 
 Or you can remove the feature set namespaced under `dynamic:`.
@@ -1163,8 +1170,9 @@ Or you can remove the feature set namespaced under `dynamic:`.
 You can also disable loading sources or languages only:
 
 ```rust
-.library_load_sources(false)
-.library_load_languages(false)
+builder
+  .library_load_sources(false)
+  .library_load_languages(false)
 ```
 
 Or via features: `dynamic:sources` and `dynamic:languages`.
