@@ -4,7 +4,10 @@ _“Crackfic-taken-seriously in the form of an open-source project readme,” th
 
 - **Not published on crates.io**
 - MSRV: latest stable, no version bump
-- License: [CC-BY-SA-NC](./LICENSE)
+- License: [CC-BY-NC-SA](./LICENSE)
+- Contributions: use [the Caretaker model](https://caretaker.passcod.name)
+
+<sup>In case this is unclear: this is not and will never be actual working software.</sup>
 
 ## Quick-start
 
