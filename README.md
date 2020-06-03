@@ -4,8 +4,7 @@ _“Crackfic-taken-seriously in the form of an open-source project readme,” th
 
 - **Not published on crates.io**
 - MSRV: latest stable, no version bump
-- License: [Artistic 2.0](./LICENSE)
-- API Documentation: https://passcod.name/figleaf/
+- License: [CC-BY-SA-NC](./LICENSE)
 
 ## Quick-start
 
@@ -96,163 +95,163 @@ Settings {
 
 ## Table of contents
 
-Stricken items are not (or only partially) implemented yet.
+Unlinked items are not (or only partially) written yet.
 
-- ~~[Concepts]~~
-- ~~[Definition](#definition-of-configuration-structure)~~
-  + ~~[Arbitrary](#arbitrary-value)~~
-  + ~~[Serde deserialisable](#serde-deserialisable-only)~~
-    * ~~[Refresher](#refresher-on-serde-syntax)~~
-    * ~~[Helpers](#serde-helpers)~~
-  + ~~[Macro](#figleaf-macro)~~
-    * ~~[Standalone](#standalone-use)~~
-    * ~~[Alongside serde](#alongside-serde)~~
-    * ~~[Derived fields](#derived-fields)~~
-    * ~~[Switched fields](#switched-fields)~~
-    * ~~[Documentation comments](#documentation-comments)~~
-    * ~~[Contextual documentation](#contextual-documentation)~~
-    * ~~[Conditionals](#runtime-field-conditions)~~
-- ~~[Generators](#generators)~~
-  + ~~[Readme](#readme)~~
-  + ~~[Example config file](#example-configuration-file)~~
-  + ~~[Man page](#man-page)~~
-  + ~~[JSON](#json)~~
-- ~~[Loading](#loading)~~
-  + ~~[Async](#async)~~
-  + ~~[Blocking](#blocking)~~
-  + ~~[Sync](#all-synchronous)~~
-  + ~~[Singleton](#singleton)~~
-    * ~~[Eager](#static-config-loaded-eagerly)~~
-    * ~~[Lazy](#static-config-loaded-lazily)~~
-    * ~~[With main](#dynamic-config-in-main)~~
-- ~~[Recursive reconfiguration](#recursive-reconfiguration)~~
-- ~~[In libraries](#in-libraries)~~
-  + ~~[Usage]~~
-  + ~~[Discovery]~~
-  + ~~[Overrides]~~
-  + ~~[Excludes]~~
-  + ~~[Remapping]~~
-- ~~[Languages](#languages)~~
-  + ~~[Defaults](#the-default-set)~~
-  + ~~[Compile-time selection](#compile-time-selection)~~
-  + ~~[Additional](#using-additional-languages)~~
-  + ~~[Runtime selection](#runtime-selection)~~
-  + ~~[File extentions and mimetypes](#file-exensions-and-mimetypes)~~
-  + ~~[Auto-detection](#auto-detection)~~
-- ~~[Sources](#sources)~~
-  + ~~[Compile-time selection](#compiling-in)~~
-  + ~~[Runtime filtering](#filtering)~~
-- ~~[Environment](#environment)~~
-  + ~~[Key format (prefix, etc)](#key-format)~~
-  + ~~[Value parsing]~~
-  + ~~[Blobs]~~
-- ~~[Arguments]~~
-  + ~~[Wildcards / globs]~~
-  + ~~[Positional]~~
-  + ~~[Pico]~~
-  + ~~[Clap]~~
-    * ~~[From Figleaf]~~
-    * ~~[From existing]~~
-- ~~[Files]~~
-  + ~~[Lookup paths]~~
-  + ~~[Hierarchy]~~
-  + ~~[Permissions and file attributes]~~
-  + ~~[Overriding]~~
-  + ~~[Includes]~~
-    * ~~[Via `.d` folders]~~
-    * ~~[Via language]~~
-    * ~~[Via recursion]~~
-    * ~~[Via preprocessor]~~
-  + ~~[With a custom reader]~~
-  * ~~[Memory-mapped]~~
-- ~~[Network]~~
-  + ~~[HTTP]~~
-    * ~~[HTTPS]~~
-    * ~~[HTTP/3]~~
-  + ~~[TCP]~~
-    * ~~[TLS]~~
-    * ~~[Domain sockets]~~
-  + ~~[UDP]~~
-    * ~~[Passive]~~
-    * ~~[Active]~~
-    * ~~[QUIC]~~
-    * ~~[Datagram sockets]~~
-  + ~~[DNS]~~
-    * ~~[mDNS]~~
-- ~~[Databases]~~
-  + ~~[Connection]~~
-    * ~~[Configuration]~~
-    * ~~[Reuse]~~
-    * ~~[Pooling]~~
-  + ~~[Relational]~~
-    * ~~[SQLite]~~
-    * ~~[MySQL]~~
-    * ~~[Postgres]~~
-    * ~~[MSSQL]~~
-    * ~~[Cassandra]~~
-    * ~~[Redshift]~~
-  + ~~[Key-value]~~
-    * ~~[Redis-like]~~
-    * ~~[LevelDB-like]~~
-    * ~~[Sled]~~
-    * ~~[Etcd]~~
-    * ~~[Consul]~~
-    * ~~[Riak]~~
-  + ~~[Document]~~
-    * ~~[Mongo]~~
-    * ~~[Couch]~~
-- ~~[Platorm-specific]~~
-  + ~~[D-Bus]~~
-  + ~~[Windows COM]~~
-  + ~~[Windows Registry]~~
-  + ~~[Apple Events]~~
-  + ~~[Virtual filesystems]~~
-- ~~[Special]~~
-  + ~~[Standard input]~~
-  + ~~[Appended to binary]~~
-  + ~~[Shared memory]~~
-  + ~~[Keyring]~~
-  + ~~[Clipboard]~~
-  + ~~[EFI variables]~~
-  + ~~[Hardware tokens]~~
-  + ~~[Serial]~~
-  + ~~[Block device]~~
-- ~~[Reloading]~~
-  + ~~[Watching and polling]~~
-  + ~~[Signals]~~
-  + ~~[Reconfiguration]~~
-  + ~~[Environment]~~
-  + ~~[Files]~~
-  + ~~[Network]~~
-  + ~~[Database]~~
-- ~~[Encryption]~~
-  + ~~[Symmetric]~~
-  + ~~[Public key]~~
-    * ~~[Signing]~~
-  + ~~[Layered]~~
-  + ~~[Partial]~~
-    * ~~[By method]~~
-    * ~~[By file]~~
-    * ~~[By key]~~
-  + ~~[From hardware module]~~
-  + ~~[Secrets in memory]~~
-- ~~[Appendices](#appendices)~~
-  + ~~[libfigleaf](#libfigleaf)~~
-    * ~~[Obtaining](#obtaining-libfigleaf)~~
-    * ~~[Customising](#custom-build)~~
-    * ~~[Configuring](#dynlib-loading-options)~~
-    * ~~[Disabling](#disabling-dynamic-loading)~~
-  + ~~[Feature profiles]~~
-  + ~~[Feature reference]~~
-  + ~~[Optimisation guidelines]~~
-  + ~~[Bindings]~~
-    * ~~[C/C++]~~
-    * ~~[WASM]~~ /* with optional inbound bindings to provide *s etc access */
-    * ~~[Node.js]~~
-    * ~~[Deno]~~ /* 1) via wasm, with deno-sided fs/env/args *inks; 2) as native op crate once that lands in deno */
-    * ~~[Ruby]~~
-    * ~~[PHP]~~
-    * ~~[Swift]~~
+- [Concepts]
+- [Definition](#definition-of-configuration-structure)
+  + [Arbitrary](#arbitrary-value)
+  + [Serde deserialisable](#serde-deserialisable-only)
+    * [Refresher](#refresher-on-serde-syntax)
+    * [Helpers](#serde-helpers)
+  + [Macro](#figleaf-macro)
+    * [Standalone](#standalone-use)
+    * [Alongside serde](#alongside-serde)
+    * [Derived fields](#derived-fields)
+    * [Switched fields](#switched-fields)
+    * [Documentation comments](#documentation-comments)
+    * [Contextual documentation](#contextual-documentation)
+    * [Conditionals](#runtime-field-conditions)
+- [Generators](#generators)
+  + [Readme](#readme)
+  + [Example config file](#example-configuration-file)
+  + [Man page](#man-page)
+  + [JSON](#json)
+- [Loading](#loading)
+  + [Async](#async)
+  + [Blocking](#blocking)
+  + [Sync](#all-synchronous)
+  + [Singleton](#singleton)
+    * [Eager](#static-config-loaded-eagerly)
+    * [Lazy](#static-config-loaded-lazily)
+    * [With main](#dynamic-config-in-main)
+- [Recursive reconfiguration](#recursive-reconfiguration)
+- [In libraries](#in-libraries)
+  + [Usage]
+  + [Discovery]
+  + [Overrides]
+  + [Excludes]
+  + [Remapping]
+- [Languages](#languages)
+  + [Defaults](#the-default-set)
+  + [Compile-time selection](#compile-time-selection)
+  + [Additional](#using-additional-languages)
+  + [Runtime selection](#runtime-selection)
+  + [File extentions and mimetypes](#file-exensions-and-mimetypes)
+  + [Auto-detection](#auto-detection)
+- [Sources](#sources)
+  + [Compile-time selection](#compiling-in)
+  + [Runtime filtering](#filtering)
+- [Environment](#environment)
+  + [Key format (prefix, etc)](#key-format)
+  + [Value parsing]
+  + [Blobs]
+- [Arguments]
+  + [Wildcards / globs]
+  + [Positional]
+  + [Pico]
+  + [Clap]
+    * [From Figleaf]
+    * [From existing]
+- [Files]
+  + [Lookup paths]
+  + [Hierarchy]
+  + [Permissions and file attributes]
+  + [Overriding]
+  + [Includes]
+    * [Via `.d` folders]
+    * [Via language]
+    * [Via recursion]
+    * [Via preprocessor]
+  + [With a custom reader]
+  * [Memory-mapped]
+- [Network]
+  + [HTTP]
+    * [HTTPS]
+    * [HTTP/3]
+  + [TCP]
+    * [TLS]
+    * [Domain sockets]
+  + [UDP]
+    * [Passive]
+    * [Active]
+    * [QUIC]
+    * [Datagram sockets]
+  + [DNS]
+    * [mDNS]
+- [Databases]
+  + [Connection]
+    * [Configuration]
+    * [Reuse]
+    * [Pooling]
+  + [Relational]
+    * [SQLite]
+    * [MySQL]
+    * [Postgres]
+    * [MSSQL]
+    * [Cassandra]
+    * [Redshift]
+  + [Key-value]
+    * [Redis-like]
+    * [LevelDB-like]
+    * [Sled]
+    * [Etcd]
+    * [Consul]
+    * [Riak]
+  + [Document]
+    * [Mongo]
+    * [Couch]
+- [Platorm-specific]
+  + [D-Bus]
+  + [Windows COM]
+  + [Windows Registry]
+  + [Apple Events]
+  + [Virtual filesystems]
+- [Special]
+  + [Standard input]
+  + [Appended to binary]
+  + [Shared memory]
+  + [Keyring]
+  + [Clipboard]
+  + [EFI variables]
+  + [Hardware tokens]
+  + [Serial]
+  + [Block device]
+- [Reloading]
+  + [Watching and polling]
+  + [Signals]
+  + [Reconfiguration]
+  + [Environment]
+  + [Files]
+  + [Network]
+  + [Database]
+- [Encryption]
+  + [Symmetric]
+  + [Public key]
+    * [Signing]
+  + [Layered]
+  + [Partial]
+    * [By method]
+    * [By file]
+    * [By key]
+  + [From hardware module]
+  + [Secrets in memory]
+- [Appendices](#appendices)
+  + [libfigleaf](#libfigleaf)
+    * [Obtaining](#obtaining-libfigleaf)
+    * [Customising](#custom-build)
+    * [Configuring](#dynlib-loading-options)
+    * [Disabling](#disabling-dynamic-loading)
+  + [Feature profiles]
+  + [Feature reference]
+  + [Optimisation guidelines]
+  + [Bindings]
+    * [C/C++]
+    * [WASM] /* with optional inbound bindings to provide *s etc access */
+    * [Node.js]
+    * [Deno] /* 1) via wasm, with deno-sided fs/env/args *inks; 2) as native op crate once that lands in deno */
+    * [Ruby]
+    * [PHP]
+    * [Swift]
 
 ## Definition of configuration structure
 
@@ -900,31 +899,31 @@ TODO: builder example code for 2 and 3
 
 ## Sources
 
-- ~~[Environment](#environment)~~
-- ~~[Arguments]~~
-- ~~[Files]~~
-- ~~[Network]~~
-- ~~[Databases]~~
-  + ~~[Connection]~~
-  + ~~[Relational]~~
-  + ~~[Key-value]~~
-  + ~~[Document]~~
-- ~~[Platorm-specific]~~
-  + ~~[D-Bus]~~
-  + ~~[Windows COM]~~
-  + ~~[Windows Registry]~~
-  + ~~[Apple Events]~~
-  + ~~[Virtual filesystems]~~
-- ~~[Special]~~
-  + ~~[Standard input]~~
-  + ~~[Appended to binary]~~
-  + ~~[Shared memory]~~
-  + ~~[Keyring]~~
-  + ~~[Clipboard]~~
-  + ~~[EFI variables]~~
-  + ~~[Hardware tokens]~~
-  + ~~[Serial]~~
-  + ~~[Block device]~~
+- [Environment](#environment)
+- [Arguments]
+- [Files]
+- [Network]
+- [Databases]
+  + [Connection]
+  + [Relational]
+  + [Key-value]
+  + [Document]
+- [Platorm-specific]
+  + [D-Bus]
+  + [Windows COM]
+  + [Windows Registry]
+  + [Apple Events]
+  + [Virtual filesystems]
+- [Special]
+  + [Standard input]
+  + [Appended to binary]
+  + [Shared memory]
+  + [Keyring]
+  + [Clipboard]
+  + [EFI variables]
+  + [Hardware tokens]
+  + [Serial]
+  + [Block device]
 
 Most of the sections below deal with the various kinds of configuration sources
 that Figleaf supports, either out of the box or as features. Sources are where
@@ -1039,11 +1038,11 @@ builder
 
 ## Appendices
 
-- ~~[libfigleaf](#libfigleaf)~~
-- ~~[Feature profiles]~~
-- ~~[Feature reference]~~
-- ~~[Optimisation guidelines]~~
-- ~~[Bindings]~~
+- [libfigleaf](#libfigleaf)
+- [Feature profiles]
+- [Feature reference]
+- [Optimisation guidelines]
+- [Bindings]
 
 ### libfigleaf
 
