@@ -511,11 +511,10 @@ Available conditional attributes:
 - `reload`: `"true"` when the config is being reloaded
 - `singleton`: `"true"` when loading as a singleton
 - `source`: `file`, `env`, `args`, `db:*`...
-- TODO: more
 
 ## Generators
 
-Figleaf comes several generators that create useful output from your
+Figleaf comes with several generators that create useful output from your
 configuration definition. Due to technical limitations, these need to be called
 from your own code and return strings — you can then output to screen or to
 file as you see fit.
@@ -773,6 +772,19 @@ none of these are Figleaf default strategies):
   the binary, which is used to decrypt the rest of the concat'd blob into
   configuration secrets; meanwhile the innoffensive part of the config is
   loaded from plain text file as per normal.
+
+Reconfigurability does not require fields to be wrapped in `Option`s, instead
+using `MaybeUninit` to partially construct the structure as it is loaded, in
+the same way that derived and switched fields are filled in. Figleaf ensures
+that you never encounter partially-initialised or uninitialised data once the
+configuration is entirely loaded, but (as mentioned there) derived and switched
+fields may deal with such uninitialised data.
+
+Reconfiguration is primarily configured via the `#[figleaf(depends_on = ...)]`
+attribute on fields, which specifies one or more fields the field the attribute
+precedes depends on, and the `::using()` builder method which specifies
+additional sources (tried in inserting order) the configuration should be
+obtained from.
 
 TODO: usage
 
