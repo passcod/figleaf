@@ -829,6 +829,8 @@ in the crate’s default features), all denoted by `lang:` as demonstrated above
 
 The non-default built-in languages are:
 
+- [Dhall](https://dhall-lang.org). Feature: `lang:dhall`.
+- [HCL](https://github.com/hashicorp/hcl). Feature: `lang:hcl`.
 - [Human JSON](https://hjson.org). Feature: `lang:hjson`.
 - [HOCON](https://github.com/lightbend/config/blob/master/HOCON.md). Feature: `lang:hocon`.
 - [INI](https://en.wikipedia.org/wiki/INI_file). Feature: `lang:ini`.
@@ -864,6 +866,8 @@ media type (commonly known as “mimetype”). The built-in ones are:
 
 |    Language    | Extensions            | Media types |
 |:--------------:|:----------------------|:------------|
+| Dhall          | `dhall`               | (none) |
+| HCL            | `hcl`                 | (none) |
 | Human JSON     | `hjson`               | `application/hjson` |
 | HOCON          | `hocon`, `hoconf` [1] | `application/hocon` |
 | INI            | `ini`                 | `application/textedit`, `zz-application/zz-winassoc-ini` |
@@ -915,7 +919,7 @@ TODO: builder example code for 2 and 3
 ## Sources
 
 - [Environment](#environment)
-- [Arguments]
+- [Arguments](#arguments)
 - [Files]
 - [Network]
 - [Databases]
@@ -988,10 +992,14 @@ notable exception of the null byte (0x00) being disallowed in both. In practice,
 non-ascii keys are discouraged, and `UPPER_SNAKE_CASE` is conventional.
 
 (Technically, environment variables are a set of null-terminated byte strings,
-they're only key-value pairs in that this is how everything interprets them. Key
-and value are delimited by the first `=`, if present. Having no value or the
-empty string as a value is equivalent, and is generally interpreted as being
-unset, as there is no true way to unset a particular environment variable.)
+they're only key-value pairs in that this is how everything interprets them.
+Key and value are delimited by the first `=`, if present. Having no value or
+the empty string as a value is equivalent, and is generally interpreted as
+being unset, as there is no true way to unset a particular environment
+variable. Similarly, the order in which environment variables are provided is
+implementation-specific and may not be defined: they are usually to be
+considered an unordered set; yet internally they may be considered an ordered
+array.)
 
 Environment variables may be written to by the process itself. Child processes
 and other processes (including root) cannot change a process's environment once
@@ -1048,8 +1056,57 @@ builder
 
 ### Value parsing
 
+Value parsing can be customised globally and also per key pattern. By default,
+the following rules are applied:
 
+1. If a value is entirely digits, then the smallest unsigned integer type the
+   value fits in is selected. If the value doesn't fit in the largest integer
+   type available (u128 on most platforms), then if `source:args:bigint` is
+   enabled the value is parsed as a [`BigUint`], and otherwise it falls through
+   (to a string).
 
+2. If a value is entirely digits save for a starting minus sign (U+TODO) the
+   same process as in 1 is followed, but for signed integers (and [`BigInt`] if
+   enabled). Similarly for floats in decimal notation, and in exponent notation.
+
+3. If the value is literally `true` or `false`, case-insensitive, it is parsed
+   to the appropriate boolean.
+
+4. If the value is valid UTF-8, it is parsed as a `String`.
+
+5. Otherwise, byte strings are returned raw.
+
+## Arguments
+
+| Feature | Default | Reloadable | Watchable | Writable | Dynamic | In libfigleaf | WASM |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| `source:args` | yes | **no** | **no** | **no** | **no** | yes | yes |
+
+Arguments are provided to a program as an ordered array of arbitrary byte
+strings, excluding null bytes. Encoding may be OS- or implementation- specific.
+They are generally considered to be immutable; however it can be possible to
+overwrite them directly in memory. Figleaf explicitly does not support this and
+considers this source read-only.
+
+There are many different conventions for parsing arguments in key-value pairs
+or more complex structures. Figleaf by default attempts to simplistically parse
+the most common styles all at once:
+
+ - `-arg VALUE`, `-arg=VALUE`, `/arg VALUE`, `/arg=VALUE`, `--arg VALUE`,
+   `--arg=VALUE` all result in the key `/arg`. It makes no difference between
+   "long" and "short" options: `-a` and `--a` and `/a` are parsed the same way
+   and are equivalent. The `/` variants are only enabled on Windows to avoid
+   clashing with paths on Unices.
+
+ - If an option as per above is immediately followed by another option or the
+   end of the argument list or `--`, it is treated as a unary option (often
+   called "flag").
+
+ - All arguments following `--` are provided as-is, in order, in a Vec.
+
+TODO: clap integration
+
+Values are parsed in the same way as environment variables' are.
 
 ## Appendices
 
